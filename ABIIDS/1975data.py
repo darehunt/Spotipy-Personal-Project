@@ -46,28 +46,32 @@ for track in audio_features_dict:
 	column_names = audio_features_dict[track].keys()
 	audio_features_dict[track] = audio_features_dict[track].values()
 
-
-
 data = pd.DataFrame.from_dict(audio_features_dict, orient= 'index', columns= column_names)
-
 data.to_csv('data.csv', index=True)
 
 
-# similarity calculations
-def similarity_calculator(feature, track):
-	if type(data.loc[track, feature]) != str:
-		# percentage error
-		return abs((data.loc[track, feature] - data.loc["Frail State Of Mind", feature]) / data.loc["Frail State Of Mind", feature]) * 100
-	return 0
+##### similarity calculations #####
 
+def similarity_calculator(feature, track):
+	# percentage error
+	return (abs(data.loc[track, feature] - data.loc["Frail State Of Mind", feature]) / data.loc["Frail State Of Mind", feature])
+
+# create a new dictionary that holds track name: similarity
 similarity_dict = {}
+# iterate through all original tracks
 for track in track_id_dict:
+	# reset the similarity value for each track
 	value = 0
 	for feature in column_names:
-		value += similarity_calculator(feature, track)
+		# calculated the similarity for each column if it is a numerical value
+		if type(data.loc[track, feature]) != str: 
+			value += similarity_calculator(feature, track)
+		else:
+			break
+	# add track and value into the new dictionary
 	similarity_dict[track] = value
 
-sorted_dict = sorted(similarity_dict.keys())
+# sort the dictionary by values in ascending order
+sorted_dict = sorted(similarity_dict, key=similarity_dict.__getitem__)
 print(sorted_dict)
-
 

@@ -39,4 +39,5 @@ for album_id in album_dict.keys():
 # print audio analyses for each track
 for track in track_id_dict:
 	print(track)
-	audio_analysis = spotify.audio_analysis(track_id_dict[track])
+	#audio_analysis = spotify.audio_analysis(track_id_dict[track])
+	print(spotify.audio_features(track))
